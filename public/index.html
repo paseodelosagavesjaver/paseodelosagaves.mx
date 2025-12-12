@@ -2221,8 +2221,8 @@
 
                 const isDescarga = formId === 'lead-form-2';
                 const endpoint = isDescarga
-                    ? '[CAMBIAR_BACKEND_URL]/enviarYDescargar'
-                    : '[CAMBIAR_BACKEND_URL]/enviar';
+                    ? 'https://paseoagaves-backend.onrender.com/enviarYDescargar'
+                    : 'https://paseoagaves-backend.onrender.com/enviar';
 
                 try {
                     const response = await fetch(endpoint, {
