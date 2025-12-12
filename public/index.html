@@ -2065,8 +2065,8 @@
 
                 const isDescarga = formId === 'lead-form-2';
                 const endpoint = isDescarga
-                    ? '[CAMBIAR_BACKEND_URL]/enviarYDescargar'
-                    : '[CAMBIAR_BACKEND_URL]/enviar';
+                    ? 'https://paseoagaves-backend.onrender.com/enviarYDescargar'
+                    : 'https://paseoagaves-backend.onrender.com/enviar';
 
                 try {
                     const response = await fetch(endpoint, {
@@ -2097,7 +2097,7 @@
                         messageDiv.textContent = 'Formulario enviado correctamente. Descargando brochure...';
 
                         setTimeout(() => {
-                            window.location.href = '[CAMBIAR_BACKEND_URL]/brochure.pdf';
+                            window.location.href = 'https://paseoagaves-backend.onrender.com/brochure.pdf';
                         }, 3000);
                     } else {
                         messageDiv.classList.add('alert', 'alert-success');
@@ -2253,7 +2253,7 @@
                         messageDiv.textContent = 'Formulario enviado correctamente. Descargando brochure...';
 
                         setTimeout(() => {
-                            window.location.href = '[CAMBIAR_BACKEND_URL]/brochure.pdf';
+                            window.location.href = 'https://paseoagaves-backend.onrender.com/brochure.pdf';
                         }, 3000);
                     } else {
                         messageDiv.classList.add('alert', 'alert-success');
