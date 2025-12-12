@@ -2156,75 +2156,107 @@
                 messageDiv.textContent = '';
                 messageDiv.classList.remove('alert', 'alert-danger', 'alert-success');
 
-                const recaptchaToken = grecaptcha.getResponse(recaptchaWidgetIds[formNum]);
-                if (!recaptchaToken) {
-                    messageDiv.classList.add('alert', 'alert-danger');
-                    messageDiv.textContent = 'Por favor, completa el reCAPTCHA.';
-                    return;
+                const submitBtn = form.querySelector('button[type="submit"]');
+                const originalBtnHtml = submitBtn ? submitBtn.innerHTML : null;
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add('disabled');
+                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Enviando...';
                 }
-
-                const formData = new FormData(form);
-
-                const first_name = formData.get('first_name')?.trim() || '';
-                const email = formData.get('email')?.trim() || '';
-                const phone = formData.get('phone')?.trim() || '';
-                const aviso = formData.has('aviso');
-
-                // Validaciones front extra
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                const phoneRegex = /^[0-9]{8,10}$/;
-                const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{4,}$/;
-
-                if (!nameRegex.test(first_name)) {
-                    messageDiv.classList.add('alert', 'alert-danger');
-                    messageDiv.textContent = 'Nombre inválido. Usa solo letras y al menos 4 caracteres.';
-                    return;
-                }
-
-                if (!first_name || !email || !phone) {
-                    messageDiv.classList.add('alert', 'alert-danger');
-                    messageDiv.textContent = 'Todos los campos son obligatorios.';
-                    return;
-                }
-
-                if (!emailRegex.test(email)) {
-                    messageDiv.classList.add('alert', 'alert-danger');
-                    messageDiv.textContent = 'Correo electrónico no válido.';
-                    return;
-                }
-
-                if (!phoneRegex.test(phone)) {
-                    messageDiv.classList.add('alert', 'alert-danger');
-                    messageDiv.textContent = 'Teléfono no válido (solo números de 7 a 15 dígitos).';
-                    return;
-                }
-
-                if (!aviso) {
-                    messageDiv.classList.add('alert', 'alert-danger');
-                    messageDiv.textContent = 'Debes aceptar el aviso de privacidad.';
-                    return;
-                }
-
-                const data = {
-                    first_name,
-                    email,
-                    phone,
-                    aviso,
-                    '00N3l00000Q7A54': formData.get('00N3l00000Q7A54'),
-                    '00N3l00000Q7A57': formData.get('00N3l00000Q7A57'),
-                    '00N3l00000Q7A4k': formData.get('00N3l00000Q7A4k'),
-                    '00N3l00000Q7A4n': formData.get('00N3l00000Q7A4n'),
-                    '00N3l00000Q7A5S': formData.get('00N3l00000Q7A5S'),
-                    'g-recaptcha-response': recaptchaToken,
-                    form_origen: formId // ✅ para backend y analytics
-                };
-
-                const isDescarga = formId === 'lead-form-2';
-                const endpoint = isDescarga
-                    ? 'https://paseoagaves-backend.onrender.com/enviarYDescargar'
-                    : 'https://paseoagaves-backend.onrender.com/enviar';
 
                 try {
+                    const recaptchaToken = grecaptcha.getResponse(recaptchaWidgetIds[formNum]);
+                    if (!recaptchaToken) {
+                        messageDiv.classList.add('alert', 'alert-danger');
+                        messageDiv.textContent = 'Por favor, completa el reCAPTCHA.';
+                        setTimeout(() => {
+                            messageDiv.textContent = '';
+                            messageDiv.classList.remove('alert', 'alert-danger');
+                        }, 5000);
+                        return;
+                    }
+
+                    const formData = new FormData(form);
+
+                    const first_name = formData.get('first_name')?.trim() || '';
+                    const email = formData.get('email')?.trim() || '';
+                    const phone = formData.get('phone')?.trim() || '';
+                    const aviso = formData.has('aviso');
+
+                    // Validaciones front extra
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    const phoneRegex = /^[0-9]{8,10}$/;
+                    const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{4,}$/;
+
+                    if (!nameRegex.test(first_name)) {
+                        messageDiv.classList.add('alert', 'alert-danger');
+                        messageDiv.textContent = 'Nombre inválido. Usa solo letras y al menos 4 caracteres.';
+                        setTimeout(() => {
+                            messageDiv.textContent = '';
+                            messageDiv.classList.remove('alert', 'alert-danger');
+                        }, 5000);
+                        return;
+                    }
+
+                    if (!first_name || !email || !phone) {
+                        messageDiv.classList.add('alert', 'alert-danger');
+                        messageDiv.textContent = 'Todos los campos son obligatorios.';
+                        setTimeout(() => {
+                            messageDiv.textContent = '';
+                            messageDiv.classList.remove('alert', 'alert-danger');
+                        }, 5000);
+                        return;
+                    }
+
+                    if (!emailRegex.test(email)) {
+                        messageDiv.classList.add('alert', 'alert-danger');
+                        messageDiv.textContent = 'Correo electrónico no válido.';
+                        setTimeout(() => {
+                            messageDiv.textContent = '';
+                            messageDiv.classList.remove('alert', 'alert-danger');
+                        }, 5000);
+                        return;
+                    }
+
+                    if (!phoneRegex.test(phone)) {
+                        messageDiv.classList.add('alert', 'alert-danger');
+                        messageDiv.textContent = 'Teléfono no válido (solo números de 7 a 15 dígitos).';
+                        setTimeout(() => {
+                            messageDiv.textContent = '';
+                            messageDiv.classList.remove('alert', 'alert-danger');
+                        }, 5000);
+                        return;
+                    }
+
+                    if (!aviso) {
+                        messageDiv.classList.add('alert', 'alert-danger');
+                        messageDiv.textContent = 'Debes aceptar el aviso de privacidad.';
+                        setTimeout(() => {
+                            messageDiv.textContent = '';
+                            messageDiv.classList.remove('alert', 'alert-danger');
+                        }, 5000);
+                        return;
+                    }
+
+                    const data = {
+                        first_name,
+                        email,
+                        phone,
+                        aviso,
+                        '00N3l00000Q7A54': formData.get('00N3l00000Q7A54'),
+                        '00N3l00000Q7A57': formData.get('00N3l00000Q7A57'),
+                        '00N3l00000Q7A4k': formData.get('00N3l00000Q7A4k'),
+                        '00N3l00000Q7A4n': formData.get('00N3l00000Q7A4n'),
+                        '00N3l00000Q7A5S': formData.get('00N3l00000Q7A5S'),
+                        'g-recaptcha-response': recaptchaToken,
+                        form_origen: formId // ✅ para backend y analytics
+                    };
+
+                    const isDescarga = formId === 'lead-form-2';
+                    const endpoint = isDescarga
+                        ? 'https://paseoagaves-backend.onrender.com/enviarYDescargar'
+                        : 'https://paseoagaves-backend.onrender.com/enviar';
+
                     const response = await fetch(endpoint, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -2232,9 +2264,13 @@
                     });
 
                     if (!response.ok) {
-                        const err = await response.json();
+                        const err = await response.json().catch(() => ({}));
                         messageDiv.classList.add('alert', 'alert-danger');
                         messageDiv.textContent = err.error || 'Error al enviar el formulario.';
+                        setTimeout(() => {
+                            messageDiv.textContent = '';
+                            messageDiv.classList.remove('alert', 'alert-danger');
+                        }, 5000);
                         return;
                     }
 
@@ -2258,16 +2294,15 @@
                     } else {
                         messageDiv.classList.add('alert', 'alert-success');
                         messageDiv.textContent = 'Formulario enviado correctamente.';
+
+                        // Auto-hide mensaje de éxito después de 5 segundos
+                        setTimeout(() => {
+                            messageDiv.textContent = '';
+                            messageDiv.classList.remove('alert', 'alert-success');
+                        }, 5000);
                     }
 
                     // ✅ Analytics por formulario
-                    // if (window.gtag) {
-                    //     gtag('event', 'paseoagaves_form_submit', {   // evento único para Paseo de los Agaves
-                    //         form_name: `paseoagaves_${formId}`,      // parámetro legible para diferenciar formularios
-                    //         form_origen: formId                 // si quieres mantener este para backend o más detalle
-                    //     });
-                    // }
-
                     window.dataLayer = window.dataLayer || [];
                     window.dataLayer.push({
                         event: 'paseoagaves_form_submit',
@@ -2276,7 +2311,6 @@
                         gclid: getGclidFromUrl()
                     });
 
-
                     form.reset();
                     grecaptcha.reset(recaptchaWidgetIds[formNum]);
 
@@ -2284,6 +2318,16 @@
                     console.error('Error:', error);
                     messageDiv.classList.add('alert', 'alert-danger');
                     messageDiv.textContent = 'Error de red o del servidor.';
+                    setTimeout(() => {
+                        messageDiv.textContent = '';
+                        messageDiv.classList.remove('alert', 'alert-danger');
+                    }, 5000);
+                } finally {
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove('disabled');
+                        if (originalBtnHtml !== null) submitBtn.innerHTML = originalBtnHtml;
+                    }
                 }
             });
         });
